@@ -91,7 +91,7 @@ def juego_batalla_naval():
             else:
                 imprimir_tableros(tablero_jugador2_barcos, tablero_jugador2_disparos, "Barcos Jugador 2", "Disparos Jugador 2")
 
-            posicion = input("Introduce la posición para disparar (ej. B3): ")
+            posicion = input("\nIntroduce la posición para disparar (ej. B3): ")
             columna = ord(posicion[0].upper()) - ord('A')
             fila = int(posicion[1:]) - 1
 
@@ -112,13 +112,13 @@ def juego_batalla_naval():
                 print("¡Agua!")
 
             if all(celda != 'B' for fila in tablero_jugador2_barcos for celda in fila):
-                print("¡Felicidades, hundiste todos los barcos!")
-                print("¡Jugador 1 gana!")
+                print("\n¡Felicidades, hundiste todos los barcos!")
+                print("\n¡Jugador 1 gana!")
                 victorias_jugador1 += 1
                 break
             elif all(celda != 'B' for fila in tablero_jugador1_barcos for celda in fila):
-                print("¡Felicidades, hundiste todos los barcos!")
-                print("¡Jugador 2 gana!")
+                print("\n¡Felicidades, hundiste todos los barcos!")
+                print("\n¡Jugador 2 gana!")
                 victorias_jugador2 += 1
                 break
 
