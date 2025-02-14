@@ -121,7 +121,7 @@ def juego_batalla_naval():
                 victorias_jugador2 += 1
                 break
 
-            turno = 2 if turno else 1 == 1
+            turno = 2 if turno == 1 else 1
 
         print(f"\nPuntuación actual:\nJugador 1: {victorias_jugador1} victorias\nJugador 2: {victorias_jugador2} victorias")
 
