@@ -51,12 +51,17 @@ def disparar(tablero_jugador, tablero_disparos, fila, columna):
 
 # Verificar si un barco está hundido
 def verificar_hundimiento(tablero, tamaños_barcos):
+    barcos_hundidos = []
     for tamaño in tamaños_barcos:
         for fila in tablero:
-            if fila.count('B') == tamaño:
-                if all(celda != 'B' for fila in tablero for celda in fila):
-                    return True, tamaño
-    return False, 0
+            for i in range(len(fila) - tamaño + 1):
+                if all(celda == 'X' for celda in fila[i:i + tamaño]):
+                    barcos_hundidos.append(tamaño)
+        for col in range(len(tablero[0])):
+            for i in range(len(tablero) - tamaño + 1):
+                if all(tablero[row][col] == 'X' for row in range(i, i + tamaño)):
+                    barcos_hundidos.append(tamaño)
+    return barcos_hundidos
 
 # Juego principal
 def juego_batalla_naval():
@@ -73,7 +78,7 @@ def juego_batalla_naval():
         tablero_jugador2_barcos = crear_tablero(tamaño)
         tablero_jugador2_disparos = crear_tablero(tamaño)
 
-        print("Jugador 1, coloca tus barcos.")
+        print("\nJugador 1, coloca tus barcos.")
         for nombre_barco, tamaño in barcos:
             imprimir_tableros(tablero_jugador1_barcos, tablero_jugador1_disparos, "Barcos Jugador 1", "Disparos Jugador 1")
             colocar_barcos_manual(tablero_jugador1_barcos, tamaño, nombre_barco)
@@ -97,23 +102,23 @@ def juego_batalla_naval():
 
             if turno == 1:
                 resultado = disparar(tablero_jugador2_barcos, tablero_jugador1_disparos, fila, columna)
-                hundido, tamaño = verificar_hundimiento(tablero_jugador2_barcos, tamaños_barcos)
+                barcos_hundidos = verificar_hundimiento(tablero_jugador2_barcos, tamaños_barcos)
             else:
                 resultado = disparar(tablero_jugador1_barcos, tablero_jugador2_disparos, fila, columna)
-                hundido, tamaño = verificar_hundimiento(tablero_jugador1_barcos, tamaños_barcos)
+                barcos_hundidos = verificar_hundimiento(tablero_jugador1_barcos, tamaños_barcos)
 
             if resultado is None:
                 print("Ya disparaste en esa posición.")
             elif resultado:
-                print("¡Le diste!")
-                if hundido:
-                    print(f"¡Has hundido un barco de tamaño {tamaño}!")
+                print("\n¡Tocado!")
+                for tamaño in barcos_hundidos:
+                    print(f"¡Has hundido un barco de {tamaño}!")
             else:
-                print("¡Agua!")
+                print("\n¡Agua!")
 
             if all(celda != 'B' for fila in tablero_jugador2_barcos for celda in fila):
                 print("\n¡Felicidades, hundiste todos los barcos!")
-                print("\n¡Jugador 1 gana!")
+                print("¡Jugador 1 gana!")
                 victorias_jugador1 += 1
                 break
             elif all(celda != 'B' for fila in tablero_jugador1_barcos for celda in fila):
@@ -122,11 +127,11 @@ def juego_batalla_naval():
                 victorias_jugador2 += 1
                 break
 
-            turno = 2 if turno == 1 else 1
+            turno = 2 if turno else 1 == 1
 
         print(f"\nPuntuación actual:\nJugador 1: {victorias_jugador1} victorias\nJugador 2: {victorias_jugador2} victorias")
 
-        continuar = input("\n¿Quieres jugar otra partida? (s/n): ").lower()
+        continuar = input("¿Quieres jugar otra partida? (s/n): ").lower()
         if continuar != 's':
             break
 
