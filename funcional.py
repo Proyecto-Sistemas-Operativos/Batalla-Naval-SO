@@ -2,18 +2,15 @@ import random
 
 print("\nBATALLA NAVAL\n")
 
-# Crear el tablero de juego
 def crear_tablero(tamaño):
     return [['~'] * tamaño for _ in range(tamaño)]
 
-# Imprimir los tableros de juego en paralelo
 def imprimir_tableros(tablero1, tablero2, tipo1, tipo2):
     print(f"\n    {tipo1}          {tipo2}\n")
     print("   A B C D E F G H I J        A B C D E F G H I J")
     for idx, (fila1, fila2) in enumerate(zip(tablero1, tablero2)):
         print(f"{idx+1:<2} " + " ".join(fila1) + "     " + f"{idx+1:<2} " + " ".join(fila2))
 
-# Colocar los barcos en el tablero
 def colocar_barcos_manual(tablero, tamaño, nombre_barco):
     while True:
         orientacion = input(f"\nIntroduce la orientación del {nombre_barco} (H para horizontal, V para vertical): ").upper()
@@ -37,7 +34,6 @@ def colocar_barcos_manual(tablero, tamaño, nombre_barco):
                 break
         print("Posición inválida o el espacio ya está ocupado. Inténtalo de nuevo.")
 
-# Realizar un disparo
 def disparar(tablero_jugador, tablero_disparos, fila, columna):
     if tablero_jugador[fila][columna] == 'B':
         tablero_jugador[fila][columna] = 'X'
@@ -49,7 +45,6 @@ def disparar(tablero_jugador, tablero_disparos, fila, columna):
         return False
     return None
 
-# Verificar si un barco está hundido
 def verificar_hundimiento(tablero, tamaños_barcos):
     barcos_hundidos = []
     for tamaño in tamaños_barcos:
@@ -63,11 +58,10 @@ def verificar_hundimiento(tablero, tamaños_barcos):
                     barcos_hundidos.append(tamaño)
     return barcos_hundidos
 
-# Juego principal
 def juego_batalla_naval():
     tamaño = 10
-    barcos = [("Portaviones", 4), ("Acorazado", 3), ("Crucero", 2), ("Destructor", 1)]  # Nombre y tamaño de los barcos
-    tamaños_barcos = [4, 3, 2, 1]  # Solo tamaños de los barcos para verificación
+    barcos = [("Portaviones", 4), ("Acorazado", 3), ("Crucero", 2), ("Destructor", 1)]
+    tamaños_barcos = [4, 3, 2, 1]
 
     victorias_jugador1 = 0
     victorias_jugador2 = 0
@@ -134,6 +128,5 @@ def juego_batalla_naval():
         continuar = input("¿Quieres jugar otra partida? (s/n): ").lower()
         if continuar != 's':
             break
-
-# Ejecutar el juego
+            
 juego_batalla_naval()
