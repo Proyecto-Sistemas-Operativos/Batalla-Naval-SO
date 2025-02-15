@@ -60,8 +60,8 @@ def verificar_hundimiento(tablero, tamaños_barcos):
 
 def juego_batalla_naval():
     tamaño = 10
-    barcos = [("Portaviones", 4), ("Acorazado", 3), ("Crucero", 2), ("Destructor", 1)]
-    tamaños_barcos = [4, 3, 2, 1]
+    barcos = [("Portaviones", 4), ("Acorazado", 3), ("Crucero", 2), ("Destructor #1", 1), ("Destructor #2", 1)]
+    tamaños_barcos = [4, 3, 2, 1, 1]
 
     victorias_jugador1 = 0
     victorias_jugador2 = 0
