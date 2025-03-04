@@ -1,6 +1,10 @@
 import random
+import os
 
 print("\nBATALLA NAVAL\n")
+
+def limpiar_pantalla():
+    os.system('cls')
 
 def crear_tablero(tamano):
     return [['~'] * tamano for _ in range(tamano)]
@@ -12,19 +16,13 @@ def imprimir_tableros(tablero1, tablero2, tipo1, tipo2):
         print(f"{idx+1:<2} " + " ".join(fila1) + "     " + f"{idx+1:<2} " + " ".join(fila2))
 
 def colocar_barcos_manual(tablero, tamano, nombre_barco):
-    print("-------------\n")
-    print("Instrucciones para posicionar")
-    print("\nPara posicionar verticalmente se usa: Columna + Fila")
-    print("\nPara posicionar horizontalmente se usa: Fila + Columna")
-    print("-------------\n")
     while True:
-        """orientacion = input(f"\nIntroduce la orientación del {nombre_barco} (H para horizontal, V para vertical): ").upper()
+        orientacion = input(f"\nIntroduce la orientación del {nombre_barco} (H para horizontal, V para vertical): ").upper()
         if orientacion not in ['H', 'V']:
             print("Orientación inválida. Por favor, introduce 'H' para horizontal o 'V' para vertical.")
-            continue"""
+            continue
 
         posicion = input(f"Introduce la posición inicial del {nombre_barco} (ej. B3): ")
-
         print(f"POSICION: {posicion}")
         columna = ord(orientacion[0].upper()) - ord('A')
         fila = int(posicion[1]) - 1
@@ -65,7 +63,7 @@ def verificar_hundimiento(tablero, tamanos_barcos):
                     barcos_hundidos.append(tamano)
     return barcos_hundidos
 
-def juego_batalla_naval():
+def empezar():
     tamano = 10
     barcos = [("Portaviones", 4), ("Acorazado", 3), ("Crucero", 2), ("Destructor #1", 1), ("Destructor #2", 1)]
     tamanos_barcos = [4, 3, 2, 1, 1]
@@ -135,5 +133,3 @@ def juego_batalla_naval():
         continuar = input("¿Quieres jugar otra partida? (s/n): ").lower()
         if continuar != 's':
             break
-            
-juego_batalla_naval()
