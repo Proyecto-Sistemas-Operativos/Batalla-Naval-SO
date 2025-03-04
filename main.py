@@ -1,3 +1,3 @@
-from modules.battlefield_game import start
+import funcional
 
-start()
+juego_batalla_naval()

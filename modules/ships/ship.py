@@ -1,17 +1,20 @@
 class Ship:
-    def __init__(self, name, size):
+    def __init__(self, name, size, coordinates = []):
         self.name = name
         self.size = size
-        self.coordinates = []
+        self.coordinates = coordinates
         self.sunkCoordinates = []
 
-    def receive_hit(self, coordinate):
+    def receiveHit(self, coordinate):
         if coordinate in self.sunkCoordinates:
-            print(f"¡La pieza del barco en la coordenada ({coordinate}) ya se encuentra hundida!")
+            print(f"¡Ya habías destruido una parte de la flota en la coordenada '{coordinate}!")
             return False
-        
+
         self.sunkCoordinates.append(coordinate)
         return True
 
-    def is_sunk(self):
-        return len(self.sunkCoordinates) == len(self.length)
+    def setCoordinates(self, coordinates):
+        self.coordinates = coordinates
+
+    def isSunk(self):
+        return len(self.sunkCoordinates) == len(self.size)
