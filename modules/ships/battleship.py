@@ -1,5 +1,5 @@
-from ships import Ship
+from ships.ship import Ship
 
-class Submarine(Ship):
+class Battleship(Ship):
     def __init__(self):
         super().__init__("Submarino", 1)

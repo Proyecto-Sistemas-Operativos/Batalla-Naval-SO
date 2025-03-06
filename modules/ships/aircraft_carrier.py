@@ -1,4 +1,4 @@
-from ships import Ship
+from ships.ship import Ship
 
 class AircraftCarrier(Ship):
     def __init__(self):
