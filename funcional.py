@@ -18,15 +18,15 @@ def colocar_barcos_manual(tablero, tamano, nombre_barco):
     print("\nPara posicionar horizontalmente se usa: Fila + Columna")
     print("-------------\n")
     while True:
-        """orientacion = input(f"\nIntroduce la orientación del {nombre_barco} (H para horizontal, V para vertical): ").upper()
+        orientacion = input(f"\nIntroduce la orientación del {nombre_barco} (H para horizontal, V para vertical): ").upper()
         if orientacion not in ['H', 'V']:
             print("Orientación inválida. Por favor, introduce 'H' para horizontal o 'V' para vertical.")
-            continue"""
+            continue
 
         posicion = input(f"Introduce la posición inicial del {nombre_barco} (ej. B3): ")
 
         print(f"POSICION: {posicion}")
-        columna = ord(orientacion[0].upper()) - ord('A')
+        columna = ord(posicion[0].upper()) - ord('A')
         fila = int(posicion[1]) - 1
 
         if orientacion == 'H':
@@ -54,15 +54,27 @@ def disparar(tablero_jugador, tablero_disparos, fila, columna):
 
 def verificar_hundimiento(tablero, tamanos_barcos):
     barcos_hundidos = []
-    for tamano in tamanos_barcos:
-        for fila in tablero:
+    visitados = set() 
+
+    for tamano in sorted(tamanos_barcos, reverse=True):  
+        # Búsqueda horizontal
+        for fila_idx, fila in enumerate(tablero):
             for i in range(len(fila) - tamano + 1):
-                if all(celda == 'X' for celda in fila[i:i + tamano]):
+                segmento = [(fila_idx, i + j) for j in range(tamano)]
+                if all((fila_idx, i + j) not in visitados and fila[i + j] == 'X' for j in range(tamano)):
                     barcos_hundidos.append(tamano)
-        for col in range(len(tablero[0])):
+                    visitados.update(segmento)  
+                    break 
+
+        # Búsqueda vertical
+        for col_idx in range(len(tablero[0])):
             for i in range(len(tablero) - tamano + 1):
-                if all(tablero[row][col] == 'X' for row in range(i, i + tamano)):
+                segmento = [(i + j, col_idx) for j in range(tamano)]
+                if all((i + j, col_idx) not in visitados and tablero[i + j][col_idx] == 'X' for j in range(tamano)):
                     barcos_hundidos.append(tamano)
+                    visitados.update(segmento) 
+                    break 
+
     return barcos_hundidos
 
 def juego_batalla_naval():
@@ -112,6 +124,8 @@ def juego_batalla_naval():
                 print("Ya disparaste en esa posición.")
             elif resultado:
                 print("\n¡Tocado!")
+                #Preguntar 
+
                 for tamano in barcos_hundidos:
                     print(f"¡Has hundido un barco de {tamano}!")
             else:
