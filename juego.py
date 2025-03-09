@@ -1,5 +1,5 @@
 from typing import List
-
+import os
 from jugador import Jugador
 from red import Red
 
@@ -32,8 +32,15 @@ class Juego:
                 self.red.enviar({"disparo": f"{chr(columna + ord('A'))}{fila + 1}"})
                 resultado = self.red.recibir()["resultado"]
                 print(f"Resultado: {resultado}")
-                if resultado == "Hundido":
-                    print("¡Hundiste un barco!")
+                if resultado == "Tocado":
+                    self.jugador_local.tablero_disparos.feedback_disparo(
+                        fila, columna, self.jugador_local.tablero_disparos.matriz, True
+                    )
+                else:
+                    self.jugador_local.tablero_disparos.feedback_disparo(
+                        fila, columna, self.jugador_local.tablero_disparos.matriz, False
+                    )
+
             else:
                 print("Turno del oponente:")
                 data = self.red.recibir()
@@ -41,7 +48,7 @@ class Juego:
                 columna = ord(disparo[0]) - ord("A")
                 fila = int(disparo[1:]) - 1
                 resultado = self.jugador_local.tablero.recibir_disparo(
-                    fila, columna, self.jugador_local.tablero_disparos.matriz
+                    fila, columna, self.jugador_local.tablero.matriz
                 )
                 print(f"Oponente disparó a {disparo}: {resultado}")
                 self.red.enviar({"resultado": resultado})
@@ -52,6 +59,8 @@ class Juego:
                     break
 
             self.turno_local = not self.turno_local
+        print("Juego terminado")
+        os.system("pause")
 
     def cerrar(self):
         self.red.cerrar()

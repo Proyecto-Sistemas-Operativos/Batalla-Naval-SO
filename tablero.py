@@ -45,12 +45,20 @@ class Tablero:
             for i in range(tamano):
                 self.matriz[fila + i][columna] = "B"
 
-    def recibir_disparo(self, fila: int, columna: int, tablero_disparos) -> str:
+    def recibir_disparo(self, fila: int, columna: int, tablero) -> str:
         if self.matriz[fila][columna] == "B":
             self.matriz[fila][columna] = "X"
-            tablero_disparos[fila][columna] = "X"
+            tablero[fila][columna] = "X"
             return "Tocado"
         elif self.matriz[fila][columna] == "~":
             self.matriz[fila][columna] = "O"
-            tablero_disparos[fila][columna] = "O"
+            tablero[fila][columna] = "O"
             return "Fallo"
+        
+    def feedback_disparo(self, fila:int, columna: int, tablero_disparos, hundido: bool):
+        if hundido:
+            self.matriz[fila][columna] = "X"
+            tablero_disparos[fila][columna] = "X"
+        else:
+            self.matriz[fila][columna] = "O"
+            tablero_disparos[fila][columna] = "O"
