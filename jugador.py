@@ -1,6 +1,6 @@
 from typing import List
 
-from barco import Barco
+from barco import Barco, TipoBarco
 from tablero import Tablero
 
 
@@ -11,9 +11,11 @@ class Jugador:
         self.tablero_disparos = Tablero(tamano_tablero)
         self.barcos = []
 
-    def colocar_barcos_manual(self, tamanos_barcos: List[int]):
-        for tamano in tamanos_barcos:
-            print(f"\nColocando barco de tamaño {tamano} para {self.nombre}")
+    def colocar_barcos_manual(self):
+        tipos_barcos = [TipoBarco.PORTAAVIONES, TipoBarco.ACORAZADO, TipoBarco.CRUCERO, TipoBarco.DESTRUCTOR]
+
+        for tipo in tipos_barcos:
+            print(f"\nColocando {tipo.name} (Tamaño {tipo.value}) para {self.nombre}")
             while True:
                 orientacion = input("Orientación (H/V): ").upper()
                 if orientacion not in ["H", "V"]:
@@ -32,9 +34,9 @@ class Jugador:
                 if not self.tablero.esta_dentro(fila, columna):
                     print("Fuera del tablero.")
                     continue
-                if self.tablero.esta_libre(fila, columna, tamano, orientacion):
-                    self.tablero.colocar_barco(fila, columna, tamano, orientacion)
-                    self.barcos.append(Barco(tamano, fila, columna, orientacion))
+                if self.tablero.esta_libre(fila, columna, tipo.value, orientacion):
+                    self.tablero.colocar_barco(fila, columna, tipo.value, orientacion)
+                    self.barcos.append(Barco(tipo, fila, columna, orientacion))
                     break
                 print("Espacio ocupado o no cabe.")
             self.tablero.mostrar_tableros(

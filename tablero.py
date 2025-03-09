@@ -48,9 +48,8 @@ class Tablero:
     def recibir_disparo(self, fila: int, columna: int, tablero_disparos) -> str:
         if self.matriz[fila][columna] == "B":
             self.matriz[fila][columna] = "X"
-            tablero_disparos[fila][columna] = "X"
-            return "Tocado"
+            return "Impacto"
         elif self.matriz[fila][columna] == "~":
             self.matriz[fila][columna] = "O"
-            tablero_disparos[fila][columna] = "O"
             return "Fallo"
+        return "Ya disparado"  # Si ya se disparó en esa posición
