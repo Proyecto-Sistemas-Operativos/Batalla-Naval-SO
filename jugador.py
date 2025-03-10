@@ -1,8 +1,6 @@
 from typing import List
-
-from barco import Barco
+from barco import Barco, TipoBarco
 from tablero import Tablero
-
 
 class Jugador:
     def __init__(self, nombre: str, tamano_tablero: int):
@@ -10,10 +8,13 @@ class Jugador:
         self.tablero = Tablero(tamano_tablero)
         self.tablero_disparos = Tablero(tamano_tablero)
         self.barcos = []
+        self.barcos_enemigos = []  # Lista para registrar los barcos enemigos
 
-    def colocar_barcos_manual(self, tamanos_barcos: List[int]):
-        for tamano in tamanos_barcos:
-            print(f"\nColocando barco de tamaño {tamano} para {self.nombre}")
+    def colocar_barcos_manual(self):
+        tipos_barcos = [TipoBarco.PORTAAVIONES, TipoBarco.ACORAZADO, TipoBarco.CRUCERO, TipoBarco.DESTRUCTOR]
+
+        for tipo in tipos_barcos:
+            print(f"\nColocando {tipo.name} (Tamaño {tipo.value}) para {self.nombre}")
             while True:
                 orientacion = input("Orientación (H/V): ").upper()
                 if orientacion not in ["H", "V"]:
@@ -32,9 +33,9 @@ class Jugador:
                 if not self.tablero.esta_dentro(fila, columna):
                     print("Fuera del tablero.")
                     continue
-                if self.tablero.esta_libre(fila, columna, tamano, orientacion):
-                    self.tablero.colocar_barco(fila, columna, tamano, orientacion)
-                    self.barcos.append(Barco(tamano, fila, columna, orientacion))
+                if self.tablero.esta_libre(fila, columna, tipo.value, orientacion):
+                    self.tablero.colocar_barco(fila, columna, tipo.value, orientacion)
+                    self.barcos.append(Barco(tipo, fila, columna, orientacion))
                     break
                 print("Espacio ocupado o no cabe.")
             self.tablero.mostrar_tableros(
@@ -62,14 +63,9 @@ class Jugador:
 
     def verificar_hundimientos(self) -> List[int]:
         barcos_hundidos = []
-        visitados = set()
         for barco in self.barcos:
             posiciones = barco.posiciones()
-            if all(
-                (f, c) not in visitados and self.tablero.matriz[f][c] == "X"
-                for f, c in posiciones
-            ):
-                barcos_hundidos.append(barco.tamano)
-                visitados.update(posiciones)
+            if all(self.tablero.matriz[f][c] == "X" for f, c in posiciones):
+                barcos_hundidos.append(barco.tipo.value) 
                 barco.hundido = True
         return barcos_hundidos

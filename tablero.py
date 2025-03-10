@@ -1,10 +1,8 @@
-from typing import List
-
-
 class Tablero:
     def __init__(self, tamano: int):
         self.tamano = tamano
         self.matriz = [["~"] * tamano for _ in range(tamano)]
+        self.barcos = []
 
     def mostrar(self):
         for fila in self.matriz:
@@ -25,9 +23,7 @@ class Tablero:
     def esta_dentro(self, fila: int, columna: int) -> bool:
         return 0 <= fila < self.tamano and 0 <= columna < self.tamano
 
-    def esta_libre(
-        self, fila: int, columna: int, tamano: int, orientacion: str
-    ) -> bool:
+    def esta_libre(self, fila: int, columna: int, tamano: int, orientacion: str) -> bool:
         if orientacion == "H":
             if columna + tamano > self.tamano:
                 return False
@@ -38,27 +34,31 @@ class Tablero:
             return all(self.matriz[fila + i][columna] == "~" for i in range(tamano))
 
     def colocar_barco(self, fila: int, columna: int, tamano: int, orientacion: str):
+        posiciones = []
         if orientacion == "H":
             for i in range(tamano):
                 self.matriz[fila][columna + i] = "B"
+                posiciones.append((fila, columna + i))
         else:  # 'V'
             for i in range(tamano):
                 self.matriz[fila + i][columna] = "B"
+                posiciones.append((fila + i, columna))
+        self.barcos.append(posiciones)
 
-    def recibir_disparo(self, fila: int, columna: int, tablero) -> str:
+    def recibir_disparo(self, fila: int, columna: int) -> str:
         if self.matriz[fila][columna] == "B":
             self.matriz[fila][columna] = "X"
-            tablero[fila][columna] = "X"
-            return "Tocado"
+            if self.verificar_hundimiento(fila, columna):
+                return "Hundido"
+            return "Impacto"
         elif self.matriz[fila][columna] == "~":
             self.matriz[fila][columna] = "O"
-            tablero[fila][columna] = "O"
             return "Fallo"
-        
-    def feedback_disparo(self, fila:int, columna: int, tablero_disparos, hundido: bool):
-        if hundido:
-            self.matriz[fila][columna] = "X"
-            tablero_disparos[fila][columna] = "X"
-        else:
-            self.matriz[fila][columna] = "O"
-            tablero_disparos[fila][columna] = "O"
+        return "Ya disparado"  # Si ya se disparó en esa posición
+
+    def verificar_hundimiento(self, fila: int, columna: int) -> bool:
+        for barco in self.barcos:
+            if (fila, columna) in barco:
+                if all(self.matriz[f][c] == "X" for f, c in barco):
+                    return True
+        return False
