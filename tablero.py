@@ -41,7 +41,7 @@ class Tablero:
                 posiciones.append((fila, columna + i))
         else:  # 'V'
             for i in range(tamano):
-                self.matriz[fila + i] = "B"
+                self.matriz[fila + i][columna] = "B"
                 posiciones.append((fila + i, columna))
         self.barcos.append(posiciones)
 
