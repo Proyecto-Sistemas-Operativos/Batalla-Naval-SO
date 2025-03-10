@@ -1,8 +1,6 @@
 from typing import List
-
 from barco import Barco, TipoBarco
 from tablero import Tablero
-
 
 class Jugador:
     def __init__(self, nombre: str, tamano_tablero: int):
@@ -10,6 +8,7 @@ class Jugador:
         self.tablero = Tablero(tamano_tablero)
         self.tablero_disparos = Tablero(tamano_tablero)
         self.barcos = []
+        self.barcos_enemigos = []  # Lista para registrar los barcos enemigos
 
     def colocar_barcos_manual(self):
         tipos_barcos = [TipoBarco.PORTAAVIONES, TipoBarco.ACORAZADO, TipoBarco.CRUCERO, TipoBarco.DESTRUCTOR]
@@ -64,14 +63,9 @@ class Jugador:
 
     def verificar_hundimientos(self) -> List[int]:
         barcos_hundidos = []
-        visitados = set()
         for barco in self.barcos:
             posiciones = barco.posiciones()
-            if all(
-                (f, c) not in visitados and self.tablero.matriz[f][c] == "X"
-                for f, c in posiciones
-            ):
-                barcos_hundidos.append(barco.tamano)
-                visitados.update(posiciones)
+            if all(self.tablero.matriz[f][c] == "X" for f, c in posiciones):
+                barcos_hundidos.append(barco.tipo.value) 
                 barco.hundido = True
         return barcos_hundidos
