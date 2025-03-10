@@ -13,7 +13,7 @@ def main():
         juego = Juego(es_servidor=True, host="0.0.0.0")
     else:
         host = input("Introduce la IP del servidor: ")
-        juego = Juego(es_servidor=False, host=str(os.getenv("HOST")))
+        juego = Juego(es_servidor=False, host=host)
     try:
         juego.iniciar()
     except Exception as e:
