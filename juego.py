@@ -4,6 +4,8 @@ from jugador import Jugador
 from red import Red
 from barco import Barco  
 
+# Clase que representa el juego de Batalla Naval
+# El juego puede ser un servidor o un cliente, y se encarga de coordinar la comunicación entre ambos jugadores
 class Juego:
     def __init__(self, es_servidor: bool, host: str, tamano_tablero: int = 10):
         self.red = Red(es_servidor, host)
@@ -14,6 +16,8 @@ class Juego:
         self.turno_local = es_servidor  # El servidor empieza
         self.cantidad_barcos_enemigos = len(self.tamanos_barcos)  # Cantidad de barcos enemigos
 
+    # Inicia el juego
+    # Se encarga de colocar los barcos del jugador local y esperar a que el otro jugador haga lo mismo
     def iniciar(self):
         self.jugador_local.colocar_barcos_manual()
         print("Esperando al otro jugador...")
@@ -23,7 +27,9 @@ class Juego:
             data = self.red.recibir()
             self.cantidad_barcos_enemigos = data.get("cantidad_barcos")
         self.jugar()
-
+    
+    # A partir de este punto, el juego se desarrolla por turnos
+    # Cada jugador dispara a las posiciones del tablero del otro
     def jugar(self):
         while True:
             try:
@@ -64,6 +70,7 @@ class Juego:
                             print("No se hundió el barco todavía.")
                         # Si acierta, se queda el turno
                         continue
+                    
                     elif resultado == "Hundido":
                         self.jugador_local.tablero_disparos.matriz[fila][columna] = "X"
                         print("¡Hundiste un barco!")
@@ -86,6 +93,7 @@ class Juego:
                         print("¡Todos tus barcos fueron hundidos! Has perdido.")
                         break
 
+                # Empieza el turno del oponente
                 else:
                     print("Turno del oponente:")
                     data = self.red.recibir()
@@ -130,7 +138,6 @@ class Juego:
         print("Juego terminado")
         os.system("pause")
 
+    # Cierra la conexión de red
     def cerrar(self):
         self.red.cerrar()
-
-        #comentario de prueba
