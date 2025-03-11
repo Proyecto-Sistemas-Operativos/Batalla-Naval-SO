@@ -132,3 +132,5 @@ class Juego:
 
     def cerrar(self):
         self.red.cerrar()
+
+        #comentario de prueba
