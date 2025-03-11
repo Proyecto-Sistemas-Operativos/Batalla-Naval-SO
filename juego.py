@@ -17,6 +17,14 @@ class Juego:
     def iniciar(self):
         self.jugador_local.colocar_barcos_manual()
         print("Esperando al otro jugador...")
+
+        self.red.enviar({"listo": True})
+
+        data = self.red.recibir()
+        if not data.get("listo"): 
+            raise ValueError("No se recibió confirmación de listo del otro jugador")
+
+        
         if self.turno_local:
             self.red.enviar({"cantidad_barcos": self.cantidad_barcos_enemigos})
         else:
