@@ -9,7 +9,7 @@ class Red:
         self.host = host
         self.port = port
         self.conn = None
-        
+
         if es_servidor:
             self.iniciar_servidor()
         else:
@@ -23,7 +23,9 @@ class Red:
             self.conn, addr = self.socket.accept()
             print(f"Conectado por {addr}")
         except Exception as e:
-            raise OSError("Error al establecer conexion!! El puerto ya esta siendo ocupado")
+            raise OSError(
+                "Error al establecer conexion!! El puerto ya esta siendo ocupado"
+            )
 
     def iniciar_cliente(self):
         try:
@@ -36,14 +38,12 @@ class Red:
     def enviar(self, datos: dict):
         try:
             self.conn.send(json.dumps(datos).encode())
-            print(f"Datos enviados: {datos}")
         except Exception as e:
             print(f"Error al enviar datos: {e}")
 
     def recibir(self) -> dict:
         try:
             data = self.conn.recv(1024).decode()
-            print(f"Datos recibidos: {data}")
             return json.loads(data)
         except Exception as e:
             print(f"Error al recibir datos: {e}")
