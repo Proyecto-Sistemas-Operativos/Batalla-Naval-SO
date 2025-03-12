@@ -1,6 +1,8 @@
 from typing import List
+
 from barco import Barco, TipoBarco
 from tablero import Tablero
+
 
 class Jugador:
     def __init__(self, nombre: str, tamano_tablero: int):
@@ -11,9 +13,20 @@ class Jugador:
         self.barcos_enemigos = []  # Lista para registrar los barcos enemigos
 
     def colocar_barcos_manual(self):
-        tipos_barcos = [TipoBarco.PORTAAVIONES, TipoBarco.ACORAZADO, TipoBarco.CRUCERO, TipoBarco.DESTRUCTOR]
+        tipos_barcos = [
+            TipoBarco.PORTAAVIONES,
+            TipoBarco.ACORAZADO,
+            TipoBarco.CRUCERO,
+            TipoBarco.DESTRUCTOR,
+        ]
 
         for tipo in tipos_barcos:
+            self.tablero.mostrar_tableros(
+                self.tablero.matriz,
+                self.tablero_disparos.matriz,
+                "Barcos Jugador 1",
+                "Disparos Jugador 1",
+            )
             print(f"\nColocando {tipo.name} (Tamaño {tipo.value}) para {self.nombre}")
             while True:
                 orientacion = input("Orientación (H/V): ").upper()
@@ -38,12 +51,6 @@ class Jugador:
                     self.barcos.append(Barco(tipo, fila, columna, orientacion))
                     break
                 print("Espacio ocupado o no cabe.")
-            self.tablero.mostrar_tableros(
-                self.tablero.matriz,
-                self.tablero_disparos.matriz,
-                "Barcos Jugador 1",
-                "Disparos Jugador 1",
-            )
 
     def disparar(self) -> tuple[int, int]:
         while True:
@@ -66,6 +73,6 @@ class Jugador:
         for barco in self.barcos:
             posiciones = barco.posiciones()
             if all(self.tablero.matriz[f][c] == "X" for f, c in posiciones):
-                barcos_hundidos.append(barco.tipo.value) 
+                barcos_hundidos.append(barco.tipo.value)
                 barco.hundido = True
         return barcos_hundidos
