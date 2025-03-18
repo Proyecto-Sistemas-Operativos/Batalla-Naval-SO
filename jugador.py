@@ -28,7 +28,8 @@ class Jugador:
                 "Disparos Jugador 1",
             )
             print(f"\nColocando {tipo.name} (Tamaño {tipo.value}) para {self.nombre}")
-            while True:
+            posicion_barco_confirmada = 'n'
+            while posicion_barco_confirmada != 'y':
                 orientacion = input("Orientación (H/V): ").upper()
                 if orientacion not in ["H", "V"]:
                     print("Usa 'H' o 'V'.")
@@ -47,9 +48,18 @@ class Jugador:
                     print("Fuera del tablero.")
                     continue
                 if self.tablero.esta_libre(fila, columna, tipo.value, orientacion):
+                    # Aca es donde ocurre el posicionamiento
                     self.tablero.colocar_barco(fila, columna, tipo.value, orientacion)
                     self.barcos.append(Barco(tipo, fila, columna, orientacion))
-                    break
+                    
+                    self.tablero.mostrar_tableros(self.tablero.matriz, self.tablero_disparos.matriz, "Barcos Jugador 1", "Barcos Jugador 2")
+                    posicion_barco_confirmada = input("Estas seguro de colocar el barco en esta posicion? y/n" )
+                    if posicion_barco_confirmada != 'y':
+                        self.tablero.limpiar_barco(fila, columna, tipo.value, orientacion)
+                        self.barcos.pop()
+                        continue
+                    else:
+                        break
                 print("Espacio ocupado o no cabe.")
 
     def disparar(self) -> tuple[int, int]:

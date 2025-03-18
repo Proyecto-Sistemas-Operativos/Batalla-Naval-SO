@@ -33,7 +33,11 @@ class Tablero:
                 return False
             return all(self.matriz[fila + i][columna] == "~" for i in range(tamano))
 
-    def colocar_barco(self, fila: int, columna: int, tamano: int, orientacion: str):
+    def colocar_barco(self, 
+                      fila: int, 
+                      columna: int, 
+                      tamano: int, 
+                      orientacion: str):
         posiciones = []
         if orientacion == "H":
             for i in range(tamano):
@@ -42,6 +46,22 @@ class Tablero:
         else:  # 'V'
             for i in range(tamano):
                 self.matriz[fila + i][columna] = "B"
+                posiciones.append((fila + i, columna))
+        self.barcos.append(posiciones)
+    
+    def limpiar_barco(self, 
+                      fila: int, 
+                      columna: int, 
+                      tamano: int, 
+                      orientacion: str):
+        posiciones = []
+        if orientacion == "H":
+            for i in range(tamano):
+                self.matriz[fila][columna + i] = "~"
+                posiciones.append((fila, columna + i))
+        else:  # 'V'
+            for i in range(tamano):
+                self.matriz[fila + i][columna] = "~"
                 posiciones.append((fila + i, columna))
         self.barcos.append(posiciones)
 
